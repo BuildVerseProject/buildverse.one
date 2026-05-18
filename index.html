@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildVerse (VRS) | Real Estate Tokenized on Blockchain</title>
+  <meta name="description" content="BuildVerse democratizes real estate investment through blockchain. Backed by Real World Assets (RWA), invest from $0.01. Starting in Luxembourg.">
+  <meta name="keywords" content="BuildVerse, VRS, real estate, blockchain, RWA, token, Luxembourg, investment, crypto, BSC, social impact, SMEs">
+  <meta name="author" content="BuildVerse">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://buildverse.one/">
+  <meta property="og:title" content="BuildVerse (VRS) | Real Estate on the Blockchain">
+  <meta property="og:description" content="Invest in premium real estate from $0.01. Token VRS backed by Real World Assets. Luxembourg & worldwide.">
+  <meta property="og:image" content="https://buildverse.one/logo.png">
+
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://buildverse.one/">
+  <meta property="twitter:title" content="BuildVerse (VRS) | Real Estate Tokenized">
+  <meta property="twitter:description" content="Real estate investment democratized. From $0.01 with VRS token.">
+  <meta property="twitter:image" content="https://buildverse.one/logo.png">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%231e3a5f'/><text x='50' y='65' font-size='40' text-anchor='middle' fill='white' font-family='Arial'>VRS</text></svg>">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1e3a5f',
+            accent: '#D4AF37',
+            'accent-dark': '#B8860B',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+    
+    .btn-buy {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-buy:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+    }
+    
+    .btn-buy:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    /* FAQ Accordion Styles */
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    
+    .accordion-content.active {
+      max-height: 500px;
+    }
+
+    #faq, #faq *, #faq p, #faq span, #faq div, #faq button, #faq a {
+      font-style: normal !important;
+    }
+
+    .cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #1e3a5f;
+      color: white;
+      padding: 1rem;
+      z-index: 50;
+      box-shadow: 0 -4px 6px rgba(0,0,0,0.1);
+    }
+
+    .lang-pair {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    
+    .lang-en, .lang-fr {
+      color: #1e3a5f;
+      font-weight: 500;
+      font-style: normal !important;
+    }
+
+    .bg-gradient-to-br .lang-en, .bg-gradient-to-br .lang-fr {
+      color: inherit !important;
+    }
+
+    [data-lang="fr"] .lang-en { display: none; }
+    [data-lang="en"] .lang-fr { display: none; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900" data-lang="en">
+
+  <div id="cookieBanner" class="cookie-banner hidden">
+    <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-sm">🍪 We use cookies to improve your experience. <a href="#privacy" class="underline hover:text-accent">Learn more</a></p>
+      <button onclick="acceptCookies()" class="btn-buy px-6 py-2 rounded font-semibold text-sm">Accept</button>
+    </div>
+  </div>
+
+  <nav class="bg-white shadow-md sticky top-0 z-40">
+    <div class="container mx-auto px-4 sm:px-6 py-4">
+      <div class="flex justify-between items-center">
+        <a href="#" class="flex items-center gap-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary flex items-center justify-center border-2 border-white shadow-lg">
+            <span class="text-white font-bold text-sm sm:text-base">VRS</span>
+          </div>
+          <div class="hidden sm:block lang-pair">
+            <span class="lang-en text-lg font-bold">BUILDVERSE</span>
+            <span class="lang-fr text-lg font-bold">BUILDVERSE</span>
+          </div>
+        </a>
+
+        <div class="hidden lg:flex items-center space-x-6">
+          <a href="#about" class="text-slate-700 hover:text-accent font-medium transition"><div class="lang-pair"><span class="lang-en">About</span><span class="lang-fr">À propos</span></div></a>
+          <a href="#impact" class="text-slate-700 hover:text-accent font-medium transition"><div class="lang-pair"><span class="lang-en">Impact</span><span class="lang-fr">Impact</span></div></a>
+          <a href="#security" class="text-slate-700 hover:text-accent font-medium transition"><div class="lang-pair"><span class="lang-en">Security</span><span class="lang-fr">Sécurité</span></div></a>
+          <a href="#how-to-buy" class="text-slate-700 hover:text-accent font-medium transition"><div class="lang-pair"><span class="lang-en">How to Buy</span><span class="lang-fr">Comment acheter</span></div></a>
+          <a href="#tokenomics" class="text-slate-700 hover:text-accent font-medium transition"><div class="lang-pair"><span class="lang-en">Tokenomics</span><span class="lang-fr">Tokenomics</span></div></a>
+          <a href="#story" class="text-slate-700 hover:text-accent font-medium transition"><div class="lang-pair"><span class="lang-en">Our Story</span><span class="lang-fr">Notre Histoire</span></div></a>
+          <a href="#buy" class="btn-buy px-6 py-2 rounded-full font-bold text-white shadow-lg"><div class="lang-pair"><span class="lang-en">Buy VRS</span><span class="lang-fr">Acheter VRS</span></div></a>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-4">
+          <select id="langSelector" onchange="changeLanguage(this.value)" class="border border-slate-300 rounded-lg px-2 py-1 text-sm font-medium text-slate-700 focus:outline-none focus:border-accent">
+            <option value="en">EN</option>
+            <option value="fr">FR</option>
+          </select>
+          <a href="https://x.com/BuildVrs01" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-accent transition p-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <button id="connectWallet" onclick="connectWallet()" class="btn-buy px-4 sm:px-6 py-2 rounded-full font-bold text-white shadow-lg text-sm sm:text-base">🦊 <span class="hidden sm:inline">Connect</span></button>
+          <button onclick="toggleMobileMenu()" class="lg:hidden text-slate-700 hover:text-primary"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+        </div>
+      </div>
+
+      <div id="mobileMenu" class="hidden lg:hidden mt-4 pb-4 border-t border-slate-200 pt-4">
+        <div class="flex flex-col space-y-3">
+          <a href="#about" class="text-slate-700 hover:text-accent font-medium">About / À propos</a>
+          <a href="#impact" class="text-slate-700 hover:text-accent font-medium">Impact / Social</a>
+          <a href="#security" class="text-slate-700 hover:text-accent font-medium">Security / Sécurité</a>
+          <a href="#how-to-buy" class="text-slate-700 hover:text-accent font-medium">How to Buy / Comment acheter</a>
+          <a href="#tokenomics" class="text-slate-700 hover:text-accent font-medium">Tokenomics</a>
+          <a href="#story" class="text-slate-700 hover:text-accent font-medium">Our Story / Histoire</a>
+          <a href="#buy" class="btn-buy px-6 py-2 rounded-full font-bold text-white text-center">Buy VRS / Acheter</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="relative bg-gradient-to-br from-primary via-slate-900 to-slate-800 text-white overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
+    </div>
+    <div class="container mx-auto px-4 sm:px-6 py-16 sm:py-24 relative z-10">
+      <div class="text-center max-w-7xl mx-auto"> 
+        <div class="inline-block bg-accent/20 border border-accent/40 rounded-full px-4 py-2 mb-6">
+          <span class="text-accent font-semibold text-sm" data-i18n="hero.badge">🔗 LIVE ON BINANCE SMART CHAIN</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold mb-6 leading-tight whitespace-nowrap overflow-visible">
+          <span data-i18n="hero.title">Real Estate. Redefined. For Everyone.</span>
+        </h1>
+        <p class="text-lg sm:text-xl text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed">
+          <span data-i18n="hero.subtitle">BuildVerse (VRS) democratizes real estate investment through blockchain. Backed by Real World Assets, invest from $0.01.</span>
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+          <a href="#buy" class="btn-buy px-8 py-4 rounded-xl text-lg font-bold shadow-xl hover:shadow-2xl flex items-center justify-center gap-2">
+            <span>🏠</span> <span data-i18n="hero.buyButton">Buy VRS / Acheter</span>
+          </a>
+          <a href="https://bscscan.com/token/0x1CF41f551efCb9816f3308B25f6b0357571FC6A4" target="_blank" rel="noopener noreferrer" class="bg-white/10 backdrop-blur-sm border border-white/30 hover:bg-white/20 px-8 py-4 rounded-xl text-lg font-bold transition flex items-center justify-center gap-2">
+            <span data-i18n="hero.bscscan">View on BscScan ↗</span>
+          </a>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 sm:p-6 card-hover">
+            <div class="text-2xl sm:text-3xl font-bold text-accent">$0.01</div>
+            <div class="text-sm text-slate-300 mt-1" data-i18n="stats.price">Price / Prix</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 sm:p-6 card-hover">
+            <div class="text-2xl sm:text-3xl font-bold">30B+</div>
+            <div class="text-sm text-slate-300 mt-1" data-i18n="stats.supply">Total Supply</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 sm:p-6 card-hover">
+            <div class="text-2xl sm:text-3xl font-bold">BSC</div>
+            <div class="text-sm text-slate-300 mt-1" data-i18n="stats.network">Network / Réseau</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 sm:p-6 card-hover">
+            <div class="text-2xl sm:text-3xl font-bold">✅</div>
+            <div class="text-sm text-slate-300 mt-1" data-i18n="stats.verified">Verified / Vérifié</div>
+          </div>
+        </div>
+        <div class="mt-8 p-4 bg-white/5 rounded-lg border border-white/10 max-w-2xl mx-auto">
+          <div class="text-xs text-slate-400 mb-1" data-i18n="stats.contract">Contract Address (BEP-20) / Adresse du Contrat</div>
+          <div class="font-mono text-sm text-accent break-all">0x1CF41f551efCb9816f3308B25f6b0357571FC6A4</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="about" class="py-16 sm:py-24 bg-white">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12"><h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4"><div class="lang-pair"><span class="lang-en">About BuildVerse</span><span class="lang-fr">À Propos de BuildVerse</span></div></h2><p class="text-xl text-accent font-semibold mb-4"><div class="lang-pair"><span class="lang-en">Real Assets. Real Impact.</span><span class="lang-fr">Actifs Réels. Impact Réel.</span></div></p></div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div class="bg-slate-50 rounded-2xl p-6 sm:p-8 card-hover border border-slate-200"><div class="text-4xl mb-4">🏦</div><h3 class="text-xl font-bold text-primary mb-3"><div class="lang-pair"><span class="lang-en">Real World Asset Backing</span><span class="lang-fr">Adossé à des Actifs Réels</span></div></h3><p class="text-slate-600 text-sm leading-relaxed"><div class="lang-pair"><span class="lang-en">Every VRS token is backed by tangible real estate assets — land, residential, commercial, hotels — across Luxembourg and worldwide.</span><span class="lang-fr">Chaque token VRS est adossé à des actifs immobiliers tangibles — terrains, résidentiel, commercial, hôtels — au Luxembourg et dans le monde.</span></div></p></div>
+        <div class="bg-slate-50 rounded-2xl p-6 sm:p-8 card-hover border border-slate-200"><div class="text-4xl mb-4">🔒</div><h3 class="text-xl font-bold text-primary mb-3"><div class="lang-pair"><span class="lang-en">Verified Smart Contract</span><span class="lang-fr">Smart Contract Vérifié</span></div></h3><p class="text-slate-600 text-sm leading-relaxed"><div class="lang-pair"><span class="lang-en">Smart contract deployed and publicly verified on BscScan. Full transparency, immutable records, Chainlink oracle for real-time pricing.</span><span class="lang-fr">Smart contract déployé et publiquement vérifié sur BscScan. Transparence totale, registres immuables, oracle Chainlink pour un prix en temps réel.</span></div></p></div>
+        <div class="bg-slate-50 rounded-2xl p-6 sm:p-8 card-hover border border-slate-200"><div class="text-4xl mb-4">🌍</div><h3 class="text-xl font-bold text-primary mb-3"><div class="lang-pair"><span class="lang-en">Luxembourg First</span><span class="lang-fr">Luxembourg en Premier</span></div></h3><p class="text-slate-600 text-sm leading-relaxed"><div class="lang-pair"><span class="lang-en">First operations in Luxembourg — Triple-A rated, European financial hub, attractive fiscal conditions, stable and premium real estate market.</span><span class="lang-fr">Premières opérations au Luxembourg — Notation AAA, hub financier européen, conditions fiscales attractives, marché immobilier stable et premium.</span></div></p></div>
+        <div class="bg-slate-50 rounded-2xl p-6 sm:p-8 card-hover border border-slate-200"><div class="text-4xl mb-4">💡</div><h3 class="text-xl font-bold text-primary mb-3"><div class="lang-pair"><span class="lang-en">From $0.01 — For Everyone</span><span class="lang-fr">Dès 0,01$ — Pour Tous</span></div></h3><p class="text-slate-600 text-sm leading-relaxed"><div class="lang-pair"><span class="lang-en">No minimum wealth required. No bank approval. No paperwork. Just a wallet and the desire to invest. Real estate, finally democratized.</span><span class="lang-fr">Aucun capital minimum requis. Aucune approbation bancaire. Aucune paperasse. Juste un wallet et l'envie d'investir. L'immobilier, enfin démocratisé.</span></div></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="impact" class="py-16 sm:py-24 bg-slate-50 border-y border-slate-200">
+    <div class="container mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-6">
+        <div class="lang-pair">
+          <span class="lang-en">Our Social Mission: <span class="text-accent">Protecting Jobs</span></span>
+          <span class="lang-fr">Notre Mission Sociale : <span class="text-accent">Sauvegarder l'Emploi</span></span>
+        </div>
+      </h2>
+      <p class="text-slate-600 text-lg max-w-3xl mx-auto mb-12">
+        <div class="lang-pair">
+          <span class="lang-en">BuildVerse isn't just about profits; it's about people. We inject liquidity into real estate SMEs to ensure that local expertise and jobs remain protected during market shifts.</span>
+          <span class="lang-fr">BuildVerse ne se résume pas aux profits ; il s'agit de l'humain. Nous injectons de la liquidité dans les PME de l'immobilier pour garantir que le savoir-faire local et les emplois soient protégés.</span>
+        </div>
+      </p>
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 text-left">
+          <div class="text-3xl mb-4">🛡️</div>
+          <h3 class="text-xl font-bold text-primary mb-3">
+            <div class="lang-pair">
+              <span class="lang-en">Economic Shield</span>
+              <span class="lang-fr">Bouclier Économique</span>
+            </div>
+          </h3>
+          <p class="text-slate-600 text-sm">
+            <div class="lang-pair">
+              <span class="lang-en">By acquiring and managing assets, we provide the steady capital needed for architects, contractors, and artisans to maintain their livelihoods.</span>
+              <span class="lang-fr">En acquérant et gérant des actifs, nous apportons le capital stable nécessaire aux architectes et artisans pour maintenir leur activité.</span>
+            </div>
+          </p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 text-left">
+          <div class="text-3xl mb-4">🤝</div>
+          <h3 class="text-xl font-bold text-primary mb-3">
+            <div class="lang-pair">
+              <span class="lang-en">SME Resilience</span>
+              <span class="lang-fr">Résilience des PME</span>
+            </div>
+          </h3>
+          <p class="text-slate-600 text-sm">
+            <div class="lang-pair">
+              <span class="lang-en">We act as a decentralized partner for small and medium enterprises, offering a path forward where traditional banking systems might fail them.</span>
+              <span class="lang-fr">Nous agissons comme un partenaire décentralisé pour les PME, offrant une alternative là où le système bancaire traditionnel pourrait faire défaut.</span>
+            </div>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="security" class="py-16 sm:py-24 bg-slate-50">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6">
+          <span class="text-3xl">🛡️</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4">
+          <div class="lang-pair">
+            <span class="lang-en">Security & Legal Oversight</span>
+            <span class="lang-fr">Sécurité & Surveillance Juridique</span>
+          </div>
+        </h2>
+        <p class="text-xl text-accent font-semibold mb-8">
+          <div class="lang-pair">
+            <span class="lang-en">Legally Secured. Independently Monitored.</span>
+            <span class="lang-fr">Juridiquement Sécurisé. Indépendamment Surveillé.</span>
+          </div>
+        </p>
+        <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-lg text-left">
+          <p class="text-slate-700 leading-relaxed mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">BuildVerse operates under strict independent legal oversight. An external legal counsel monitors all operations to ensure that capital is exclusively allocated to real estate acquisitions and that holder rights are strictly protected. Your investment is legally secured, fully transparent, and backed by tangible assets.</span>
+              <span class="lang-fr">BuildVerse opère sous une stricte surveillance juridique indépendante. Un conseil juridique externe supervise l'ensemble des opérations pour garantir que les fonds sont exclusivement affectés à l'acquisition d'actifs immobiliers et que les droits des détenteurs sont strictement protégés. Votre investissement est juridiquement sécure, entièrement transparent et adossé à des actifs tangibles.</span>
+            </div>
+          </p>
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6 pt-4 border-t border-slate-200 text-sm text-slate-600">
+            <div class="flex items-center gap-2">
+              <span class="text-accent">🔐</span>
+              <span><div class="lang-pair"><span class="lang-en">Compliance verified by independent legal counsel.</span><span class="lang-fr">Conformité vérifiée par un conseil juridique indépendant.</span></div></span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-primary">👥</span>
+              <span><div class="lang-pair"><span class="lang-en">Founding team remains anonymous for security reasons.</span><span class="lang-fr">L'équipe fondatrice reste anonyme pour des raisons de sécurité.</span></div></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how-to-buy" class="py-16 sm:py-24 bg-white">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4">
+          <div class="lang-pair">
+            <span class="lang-en">How to Buy VRS — Complete Beginner's Guide</span>
+            <span class="lang-fr">Comment Acheter des VRS — Guide Complet Débutant</span>
+          </div>
+        </h2>
+        <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+          <div class="lang-pair">
+            <span class="lang-en">No crypto experience needed. Follow these 5 simple steps to invest securely from $0.01.</span>
+            <span class="lang-fr">Aucune expérience crypto nécessaire. Suivez ces 5 étapes simples pour investir en toute sécurité dès 0,01$.</span>
+          </div>
+        </p>
+      </div>
+
+      <div class="max-w-5xl mx-auto">
+        <div class="flex flex-col md:flex-row gap-6 mb-10 items-start">
+          <div class="flex-shrink-0 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold">1</div>
+          <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 w-full">
+            <h3 class="text-lg font-bold text-primary mb-2"><div class="lang-pair"><span class="lang-en">Install a Crypto Wallet</span><span class="lang-fr">Installez un Wallet Crypto</span></div></h3>
+            <p class="text-slate-600 text-sm mb-3"><div class="lang-pair"><span class="lang-en">Download MetaMask (official only) on your phone or computer. This is your personal digital wallet to store VRS tokens.</span><span class="lang-fr">Téléchargez MetaMask (officiel uniquement) sur téléphone ou ordinateur. C'est votre porte-monnaie numérique personnel pour stocker les VRS.</span></div></p>
+            <a href="https://metamask.io/download/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-accent font-semibold text-sm hover:underline"><div class="lang-pair"><span class="lang-en">📲 Download MetaMask Official ↗</span><span class="lang-fr">📲 Télécharger MetaMask Officiel ↗</span></div></a>
+          </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-6 mb-10 items-start">
+          <div class="flex-shrink-0 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold">2</div>
+          <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 w-full">
+            <h3 class="text-lg font-bold text-primary mb-2"><div class="lang-pair"><span class="lang-en">Buy BNB & Send to Your Wallet</span><span class="lang-fr">Achetez du BNB & Envoyez-le vers votre Wallet</span></div></h3>
+            <p class="text-slate-600 text-sm mb-3"><div class="lang-pair"><span class="lang-en">Use a regulated exchange (Binance, Kraken, etc.) to buy BNB. Withdraw it to your MetaMask address. ⚠️ Important: Always select "BNB Smart Chain (BEP20)" network to avoid high fees.</span><span class="lang-fr">Utilisez un échange réglementé (Binance, Kraken, etc.) pour acheter du BNB. Retirez-le vers votre adresse MetaMask. ⚠️ Important : Sélectionnez toujours le réseau "BNB Smart Chain (BEP20)" pour éviter des frais élevés.</span></div></p>
+          </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-6 mb-10 items-start">
+          <div class="flex-shrink-0 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold">3</div>
+          <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 w-full">
+            <h3 class="text-lg font-bold text-primary mb-2"><div class="lang-pair"><span class="lang-en">Connect & Verify the Contract</span><span class="lang-fr">Connectez & Vérifiez le Contrat</span></div></h3>
+            <p class="text-slate-600 text-sm mb-3"><div class="lang-pair"><span class="lang-en">Click "Connect" on this page. Before buying, always verify the contract address matches: 0x1CF4...FC6A4. Never buy from DMs or unofficial links.</span><span class="lang-fr">Cliquez sur "Connecter" sur cette page. Avant d'acheter, vérifiez toujours que l'adresse du contrat correspond : 0x1CF4...FC6A4. N'achetez jamais via des messages privés ou des liens non officiels.</span></div></p>
+          </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-6 mb-10 items-start">
+          <div class="flex-shrink-0 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold">4</div>
+          <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 w-full">
+            <h3 class="text-lg font-bold text-primary mb-2"><div class="lang-pair"><span class="lang-en">Enter Amount & Confirm</span><span class="lang-fr">Entrez le Montant & Confirmez</span></div></h3>
+            <p class="text-slate-600 text-sm mb-3"><div class="lang-pair"><span class="lang-en">Enter the BNB amount you want to spend. The system calculates your VRS automatically. Confirm the transaction in MetaMask. A small network fee (usually &lt;$0.10) will apply.</span><span class="lang-fr">Entrez le montant BNB que vous souhaitez dépenser. Le système calcule automatiquement vos VRS. Confirmez la transaction dans MetaMask. Un petit frais réseau (généralement &lt;0,10$) s'appliquera.</span></div></p>
+          </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-6 mb-10 items-start">
+          <div class="flex-shrink-0 w-12 h-12 bg-accent text-white rounded-full flex items-center justify-center text-xl font-bold">5</div>
+          <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 w-full">
+            <h3 class="text-lg font-bold text-primary mb-2"><div class="lang-pair"><span class="lang-en">Receive VRS & Add to Wallet</span><span class="lang-fr">Recevez vos VRS & Ajoutez-les au Wallet</span></div></h3>
+            <p class="text-slate-600 text-sm mb-3"><div class="lang-pair"><span class="lang-en">Your VRS tokens arrive instantly. If you don't see them, click "Add VRS to MetaMask" below. Your tokens are now safely in your wallet.</span><span class="lang-fr">Vos tokens VRS arrivent instantanément. Si vous ne les voyez pas, cliquez sur "Ajouter VRS à MetaMask" ci-dessous. Vos tokens sont maintenant en sécurité dans votre wallet.</span></div></p>
+          </div>
+        </div>
+
+        <div class="mt-8 bg-yellow-50 border-l-4 border-accent rounded-r-xl p-5">
+          <h4 class="text-base font-bold text-accent mb-2 flex items-center gap-2">🔒 <div class="lang-pair"><span class="lang-en">Beginner Security Checklist</span><span class="lang-fr">Checklist de Sécurité Débutant</span></div></h4>
+          <ul class="text-sm text-slate-700 space-y-1 list-disc list-inside">
+            <li><div class="lang-pair"><span class="lang-en">Never share your 12/24-word seed phrase. No support will ever ask for it.</span><span class="lang-fr">Ne partagez jamais votre phrase secrète (12/24 mots). Aucun support ne la demandera.</span></div></li>
+            <li><div class="lang-pair"><span class="lang-en">Only use official links from this website or our verified X account.</span><span class="lang-fr">Utilisez uniquement les liens officiels de ce site ou de notre compte X vérifié.</span></div></li>
+            <li><div class="lang-pair"><span class="lang-en">Always double-check the contract address before confirming any transaction.</span><span class="lang-fr">Vérifiez toujours l'adresse du contrat avant de confirmer une transaction.</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tokenomics" class="py-16 sm:py-24 bg-slate-50">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12"><h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4">Tokenomics</h2><p class="text-xl text-accent font-semibold mb-4"><div class="lang-pair"><span class="lang-en">Built for Accessibility</span><span class="lang-fr">Conçu pour l'Accessibilité</span></div></p></div>
+      <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-12">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="text-center p-4 bg-slate-50 rounded-xl"><div class="text-2xl mb-2">💎</div><div class="text-sm text-slate-500 mb-1">Token Name / Nom</div><div class="font-bold text-primary text-lg">BuildVerse (VRS)</div></div>
+          <div class="text-center p-4 bg-slate-50 rounded-xl"><div class="text-2xl mb-2">🏷️</div><div class="text-sm text-slate-500 mb-1">Launch Price / Prix</div><div class="font-bold text-primary text-lg">$0.01 per VRS</div></div>
+          <div class="text-center p-4 bg-slate-50 rounded-xl"><div class="text-2xl mb-2">📊</div><div class="text-sm text-slate-500 mb-1">Total Supply</div><div class="font-bold text-primary text-lg">30,000,000,003</div></div>
+          <div class="text-center p-4 bg-slate-50 rounded-xl"><div class="text-2xl mb-2">⛓️</div><div class="text-sm text-slate-500 mb-1">Standard</div><div class="font-bold text-primary text-lg">BEP-20 (BSC)</div></div>
+        </div>
+      </div>
+      <div class="max-w-4xl mx-auto mt-8 bg-white rounded-xl p-6 sm:p-8 shadow-md border-l-4 border-accent">
+        <h3 class="text-xl font-bold text-primary mb-6"><div class="lang-pair"><span class="lang-en">Simple & Transparent Distribution</span><span class="lang-fr">Distribution Simple et Transparente</span></div></h3>
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-8">
+          <div class="text-center sm:text-left w-full sm:w-1/2">
+            <div class="text-4xl font-bold text-accent mb-2">100%</div>
+            <div class="font-semibold text-primary text-lg mb-2"><div class="lang-pair"><span class="lang-en">Available for Public Sale</span><span class="lang-fr">Disponible à la Vente Publique</span></div></div>
+            <p class="text-sm text-slate-500 leading-relaxed"><div class="lang-pair"><span class="lang-en">No hidden allocations. No team reserve. All 30 Billion tokens are offered directly to the community at $0.01.</span><span class="lang-fr">Aucune allocation cachée. Aucune réserve équipe. Les 30 Milliards de tokens sont offerts directement à la communauté à 0,01$.</span></div></p>
+          </div>
+          <div class="hidden sm:block w-px h-24 bg-slate-200"></div>
+          <div class="sm:hidden w-full h-px bg-slate-200 my-4"></div>
+          <div class="text-center sm:text-left w-full sm:w-1/2">
+            <div class="text-4xl font-bold text-primary mb-2">100%</div>
+            <div class="font-semibold text-primary text-lg mb-2"><div class="lang-pair"><span class="lang-en">Funds Allocated to Real Estate</span><span class="lang-fr">Fonds Alloués à l'Immobilier</span></div></div>
+            <p class="text-sm text-slate-500 leading-relaxed"><div class="lang-pair"><span class="lang-en">Every dollar raised goes directly into acquiring tangible assets (Land, Villas, Hotels) starting in Luxembourg.</span><span class="lang-fr">Chaque dollar collecté sert directement à acquérir des actifs tangibles (Terrains, Villas, Hôtels) commençant au Luxembourg.</span></div></p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 p-4 bg-yellow-50 border-l-4 border-accent rounded-r-xl">
+        <p class="text-sm text-slate-700"><strong>⚠️ Utility Token Notice :</strong> <div class="lang-pair"><span class="lang-en">VRS is a utility token backed by real estate assets. It does not constitute a security or investment advice. Always conduct your own research before investing.</span><span class="lang-fr">VRS est un token utilitaire adossé à des actifs immobiliers. Il ne constitue pas un titre financier ou un conseil en investissement. Faites toujours vos propres recherches avant d'investir.</span></div></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="story" class="py-16 sm:py-24 bg-white">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12"><h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4"><div class="lang-pair"><span class="lang-en">Our Story</span><span class="lang-fr">Notre Histoire</span></div></h2><p class="text-xl text-accent font-semibold mb-4"><div class="lang-pair"><span class="lang-en">Born From Adversity. Built With Purpose.</span><span class="lang-fr">Né de l'Adversité. Construit avec un But.</span></div></p></div>
+      <div class="max-w-4xl mx-auto">
+        <div class="bg-slate-50 rounded-2xl shadow-lg p-6 sm:p-10 mb-8">
+          <p class="text-slate-600 leading-relaxed mb-6"><div class="lang-pair"><span class="lang-en">BuildVerse didn't start in a boardroom or a venture capital office. It started in the silence of sleepless nights, after an unfair professional setback that could have ended everything.</span><span class="lang-fr">BuildVerse n'a pas commencé dans une salle de conseil ou un bureau de capital-risque. Il a commencé dans le silence des nuits blanches, après un revers professionnel injuste qui aurait pu tout terminer.</span></div></p>
+          <p class="text-slate-600 leading-relaxed mb-6"><div class="lang-pair"><span class="lang-en">The founder — a seasoned real estate negotiator and developer with years of hands-on experience — refused to let circumstances define his outcome. Instead of waiting for a door to open, he built a new one. One accessible to everyone.</span><span class="lang-fr">Le fondateur — négociateur et développeur immobilier chevronné avec des années d'expérience pratique — a refusé de laisser les circonstances définir son destin. Au lieu d'attendre qu'une porte s'ouvre, il en a construit une nouvelle. Une accessible à tous.</span></div></p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="bg-white rounded-xl p-6 border-l-4 border-red-500 shadow-md"><h3 class="text-lg font-bold text-primary mb-2">❝ The Fall / La Chute</h3><p class="text-sm text-slate-600">A toxic manager. A lost job. Silence from every recruiter. Sleepless nights. Stomach pain from anxiety. A confidence shattered to pieces. / Un manager toxique. Un emploi perdu. Silence des recruteurs. Nuits blanches. Maux d'estomac. Une confiance brisée.</p></div>
+          <div class="bg-white rounded-xl p-6 border-l-4 border-yellow-500 shadow-md"><h3 class="text-lg font-bold text-primary mb-2">The Question / La Question</h3><p class="text-sm text-slate-600">Dozens of CVs sent into the void. At 3am, one question kept returning: "What if I stopped asking for a place at the table — and built my own?" / Des dizaines de CV dans le vide. À 3h du matin : "Et si je construisais ma propre table ?"</p></div>
+          <div class="bg-white rounded-xl p-6 border-l-4 border-green-500 shadow-md"><h3 class="text-lg font-bold text-primary mb-2">The Answer / La Réponse</h3><p class="text-sm text-slate-600">Years of real estate expertise. Deep market knowledge. A vision of a fairer, more accessible system. BuildVerse was born — from necessity and unshakeable conviction. / Des années d'expertise. Une vision d'un système plus juste. BuildVerse est né — de la nécessité et d'une conviction inébranlable.</p></div>
+        </div>
+        <div class="mt-8 text-center"><blockquote class="text-xl text-slate-700 italic mb-4">"Every obstacle became a building block. BuildVerse is the proof." / "Chaque obstacle est devenu une pierre angulaire. BuildVerse en est la preuve."</blockquote><cite class="text-primary font-semibold not-italic">— Founder, BuildVerse</cite></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="buy" class="py-16 sm:py-24 bg-slate-50">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4">
+          <div class="lang-pair">
+            <span class="lang-en">Buy VRS</span>
+            <span class="lang-fr">Acheter VRS</span>
+          </div>
+        </h2>
+        <p class="text-xl text-accent font-semibold mb-4">
+          <div class="lang-pair">
+            <span class="lang-en">Simple. Fast. Secure.</span>
+            <span class="lang-fr">Simple. Rapide. Sécurisé.</span>
+          </div>
+        </p>
+      </div>
+      <div class="max-w-2xl mx-auto bg-gradient-to-br from-primary to-slate-800 rounded-2xl shadow-2xl p-6 sm:p-10 text-white">
+        <div class="text-center mb-6">
+          <div class="text-4xl mb-3">🦊</div>
+          <h3 class="text-2xl font-bold mb-2">
+            <div class="lang-pair">
+              <span class="lang-en">Buy VRS — Direct Purchase</span>
+              <span class="lang-fr">Acheter VRS — Achat Direct</span>
+            </div>
+          </h3>
+          <p class="text-slate-300 text-sm">
+            <div class="lang-pair">
+              <span class="lang-en">Connect MetaMask, enter the BNB amount, receive VRS tokens instantly in your wallet</span>
+              <span class="lang-fr">Connectez MetaMask, entrez le montant en BNB, recevez vos tokens VRS instantanément dans votre wallet</span>
+            </div>
+          </p>
+        </div>
+        <button id="buyConnectWallet" onclick="connectWallet()" class="w-full btn-buy py-3 rounded-xl font-bold mb-6 flex items-center justify-center gap-2">
+          <span>🦊</span> 
+          <span>
+            <div class="lang-pair">
+              <span class="lang-en">Connect MetaMask</span>
+              <span class="lang-fr">Connecter MetaMask</span>
+            </div>
+          </span>
+        </button>
+        <div id="walletAddress" class="hidden bg-white/10 rounded-lg p-3 mb-4 text-center font-mono text-sm"></div>
+        <div id="buyForm" class="hidden">
+          <div class="mb-4">
+            <label class="block text-sm font-medium mb-2">
+              <div class="lang-pair">
+                <span class="lang-en">AMOUNT OF BNB TO SEND</span>
+                <span class="lang-fr">MONTANT DE BNB À ENVOYER</span>
+              </div>
+            </label>
+            <div class="flex">
+              <input type="number" id="bnbAmount" step="0.001" min="0.001" placeholder="0.1" class="flex-1 bg-white/10 border border-white/30 rounded-l-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-accent" oninput="calculateVRS()">
+              <span class="bg-white/20 border border-l-0 border-white/30 rounded-r-xl px-4 py-3 flex items-center font-semibold">BNB</span>
+            </div>
+          </div>
+          <div class="mb-6 text-center p-4 bg-white/5 rounded-xl">
+            <span class="text-slate-300 text-sm">≈</span>
+            <span id="vrsAmount" class="text-3xl font-bold text-accent ml-2">—</span>
+            <span class="text-slate-300 ml-2">VRS tokens</span>
+          </div>
+          <button onclick="buyVRS()" id="buyButton" class="w-full btn-buy py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2">
+            <span>🏠</span> 
+            <span>
+              <div class="lang-pair">
+                <span class="lang-en">Buy VRS Tokens</span>
+                <span class="lang-fr">Acheter des VRS</span>
+              </div>
+            </span>
+          </button>
+          <div class="mt-4 text-center">
+            <button onclick="addTokenToMetaMask()" class="text-sm text-accent hover:underline flex items-center justify-center gap-1 mx-auto">
+              <span>+ 
+                <div class="lang-pair inline">
+                  <span class="lang-en">Add VRS to MetaMask</span>
+                  <span class="lang-fr">Ajouter VRS à MetaMask</span>
+                </div>
+              </span>
+            </button>
+          </div>
+        </div>
+        
+        <div class="mt-6 p-4 bg-white/5 rounded-xl text-xs text-white">
+          <strong class="text-accent">ℹ️ How it works / Comment ça marche :</strong>
+          <div class="lang-pair mt-1">
+            <span class="lang-en">Your BNB is sent directly to the smart contract. The Chainlink oracle converts BNB to USD in real time, calculates the number of VRS tokens and transfers them directly to your wallet. Minimum: $0.01 equivalent in BNB.</span>
+            <span class="lang-fr">Votre BNB est envoyé directement au smart contract. L'oracle Chainlink convertit le BNB en USD en temps réel, calcule le nombre de tokens VRS et les transfère instantanément dans votre wallet. Minimum : 0,01$ équivalent en BNB.</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="max-w-2xl mx-auto mt-12 bg-white rounded-2xl p-6 sm:p-8 border border-slate-200">
+        <h4 class="text-lg font-bold text-primary mb-4 text-center">Official References / Références Officielles</h4>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <a href="https://buildverse.one" class="flex items-center gap-2 text-slate-700 hover:text-accent transition"><span>🌐</span> <span>buildverse.one</span></a>
+          <a href="mailto:vrs@buildverse.one" class="flex items-center gap-2 text-slate-700 hover:text-accent transition"><span>✉️</span> <span>vrs@buildverse.one</span></a>
+          <a href="https://bscscan.com/token/0x1CF41f551efCb9816f3308B25f6b0357571FC6A4" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-slate-700 hover:text-accent transition"><span>🔎</span> <span>0x1CF4...FC6A4</span></a>
+          <a href="https://x.com/BuildVrs01" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-slate-700 hover:text-accent transition"><span>𝕏</span> <span>@BuildVrs01</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="py-16 sm:py-24 bg-white">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4">FAQ</h2>
+        <p class="text-xl text-accent font-semibold">Frequently Asked Questions / Questions Fréquentes</p>
+      </div>
+      <div class="max-w-4xl mx-auto space-y-4">
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 shadow-sm">
+          <button class="w-full px-6 py-4 text-left hover:bg-slate-100 transition flex justify-between items-center font-semibold text-primary focus:outline-none" onclick="toggleAccordion(this)">
+            <span>What is BuildVerse (VRS)? / Qu'est-ce que BuildVerse ?</span>
+            <span class="transform transition-transform duration-300 text-accent text-2xl">+</span>
+          </button>
+          <div class="accordion-content bg-white">
+            <p class="px-6 py-4 text-sm leading-relaxed" style="font-style: normal !important; color: #475569;">
+              BuildVerse is a utility token (VRS) deployed on Binance Smart Chain, backed by Real World Assets in the real estate sector. It allows anyone to participate in real estate investment from as little as $0.01. 
+              <br><br>
+              BuildVerse est un token utilitaire (VRS) déployé sur Binance Smart Chain, adossé à des actifs réels immobiliers. Il permet à quiconque de participer à l'investissement immobilier à partir de 0,01$.
+            </p>
+          </div>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 shadow-sm">
+          <button class="w-full px-6 py-4 text-left hover:bg-slate-100 transition flex justify-between items-center font-semibold text-primary focus:outline-none" onclick="toggleAccordion(this)">
+            <span>How do I buy VRS tokens? / Comment acheter des VRS ?</span>
+            <span class="transform transition-transform duration-300 text-accent text-2xl">+</span>
+          </button>
+          <div class="accordion-content bg-white">
+            <p class="px-6 py-4 text-sm leading-relaxed" style="font-style: normal !important; color: #475569;">
+              You need a MetaMask wallet connected to Binance Smart Chain, funded with BNB. Connect your wallet in the "Buy" section, enter the BNB amount, and send it directly to the smart contract. VRS tokens will be sent instantly to your wallet.
+              <br><br>
+              Vous avez besoin d'un wallet MetaMask connecté à Binance Smart Chain, approvisionné en BNB. Connectez votre wallet dans la section "Acheter", entrez le montant en BNB, et envoyez-le au smart contract.
+            </p>
+          </div>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 shadow-sm">
+          <button class="w-full px-6 py-4 text-left hover:bg-slate-100 transition flex justify-between items-center font-semibold text-primary focus:outline-none" onclick="toggleAccordion(this)">
+            <span>Why is the team anonymous? / Pourquoi l'équipe est-elle anonyme ?</span>
+            <span class="transform transition-transform duration-300 text-accent text-2xl">+</span>
+          </button>
+          <div class="accordion-content bg-white">
+            <p class="px-6 py-4 text-sm leading-relaxed" style="font-style: normal !important; color: #475569;">
+              For personal security and privacy reasons, the founding team chooses to remain anonymous — a practice common in blockchain. Transparency is ensured through our verified smart contract on BscScan.
+              <br><br>
+              Pour des raisons de sécurité et de confidentialité, l'équipe fondatrice choisit de rester anonyme — une pratique courante dans la blockchain. La transparence est assurée par notre smart contract vérifié sur BscScan.
+            </p>
+          </div>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 shadow-sm">
+          <button class="w-full px-6 py-4 text-left hover:bg-slate-100 transition flex justify-between items-center font-semibold text-primary focus:outline-none" onclick="toggleAccordion(this)">
+            <span>What is the minimum investment? / Quel est l'investissement minimum ?</span>
+            <span class="transform transition-transform duration-300 text-accent text-2xl">+</span>
+          </button>
+          <div class="accordion-content bg-white">
+            <p class="px-6 py-4 text-sm leading-relaxed" style="font-style: normal !important; color: #475569;">
+              The minimum investment is $0.01 — equivalent to one VRS token. There is no maximum. BuildVerse was built so that anyone, regardless of financial situation, can access real estate investment.
+              <br><br>
+              L'investissement minimum est de 0,01$ — équivalent à un token VRS. Il n'y a pas de maximum.
+            </p>
+          </div>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 shadow-sm">
+          <button class="w-full px-6 py-4 text-left hover:bg-slate-100 transition flex justify-between items-center font-semibold text-primary focus:outline-none" onclick="toggleAccordion(this)">
+            <span>How do dividends work? / Comment fonctionnent les dividendes ?</span>
+            <span class="transform transition-transform duration-300 text-accent text-2xl">+</span>
+          </button>
+          <div class="accordion-content bg-white">
+            <p class="px-6 py-4 text-sm leading-relaxed" style="font-style: normal !important; color: #475569;">
+              BuildVerse redistributes net revenues generated from all real estate operations (rents, property management, resales, and other asset-linked income) to VRS token holders, exclusively after the full settlement of all operational charges, management fees, taxes, and maintenance costs. 
+              <br><br>
+              <strong>Method:</strong> Periodic direct transfers (e.g., quarterly) to your wallet based on a snapshot of your balance. 
+              <br><br>
+              <strong>Strategy:</strong> The best strategy is to hold VRS long-term. Real estate is a long-term asset class, and holding allows you to benefit from both potential appreciation and regular revenue distributions.
+              <br><br>
+              <strong>Transparency:</strong> All updates, including revenue reports and distribution announcements, are published exclusively on our official X account (<a href="https://x.com/BuildVrs01" target="_blank" class="text-accent underline">@BuildVrs01</a>). Follow us there for absolute transparency.
+              <br><br>
+              BuildVerse redistribue les revenus nets générés par l'ensemble de ses opérations immobilières (loyers, gestion, reventes et autres revenus liés aux actifs) aux détenteurs de tokens VRS, et ce exclusivement après le règlement intégral de toutes les charges, frais de gestion, impôts et dépenses de maintenance. 
+              <br><br>
+              <strong>Méthode :</strong> Transferts directs périodiques (ex: trimestriels) basés sur un snapshot de votre solde. 
+              <br><br>
+              <strong>Stratégie :</strong> La meilleure stratégie est de conserver ses VRS sur le long terme. L'immobilier est un actif long terme ; conserver ses tokens permet de bénéficier à la fois de l'appréciation potentielle et des distributions régulières. 
+              <br><br>
+              <strong>Transparence :</strong> Toutes les mises à jour, y compris les rapports de revenus et les annonces de distribution, sont publiées exclusivement sur notre compte X officiel (<a href="https://x.com/BuildVrs01" target="_blank" class="text-accent underline">@BuildVrs01</a>). Suivez-nous là-bas pour une transparence absolue.
+            </p>
+          </div>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 shadow-sm">
+          <button class="w-full px-6 py-4 text-left hover:bg-slate-100 transition flex justify-between items-center font-semibold text-primary focus:outline-none" onclick="toggleAccordion(this)">
+            <span>How can I contact the team? / Comment contacter l'équipe ?</span>
+            <span class="transform transition-transform duration-300 text-accent text-2xl">+</span>
+          </button>
+          <div class="accordion-content bg-white">
+            <p class="px-6 py-4 text-sm leading-relaxed" style="font-style: normal !important; color: #475569;">
+              You can reach the BuildVerse team at vrs@buildverse.one. We aim to respond to all inquiries within 48 hours.
+              <br><br>
+              Vous pouvez joindre l'équipe BuildVerse à vrs@buildverse.one. Nous visons à répondre sous 48 heures.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="grid md:grid-cols-3 gap-8 mb-8">
+        <div><div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center border-2 border-accent"><span class="text-white font-bold">VRS</span></div><div><div class="text-xl font-bold text-white">BUILDVERSE</div><div class="text-xs text-accent">Real Estate Tokenized</div></div></div><p class="text-sm text-slate-400 mb-4">Democratizing real estate investment through blockchain. Real World Assets, accessible to everyone, from $0.01.</p></div>
+        <div><h4 class="text-white font-bold mb-4">Navigation</h4><ul class="space-y-2 text-sm"><li><a href="#about" class="hover:text-accent transition">About / À propos</a></li><li><a href="#impact" class="hover:text-accent transition">Impact / Social</a></li><li><a href="#security" class="hover:text-accent transition">Security / Sécurité</a></li><li><a href="#how-to-buy" class="hover:text-accent transition">How to Buy</a></li><li><a href="#tokenomics" class="hover:text-accent transition">Tokenomics</a></li><li><a href="#story" class="hover:text-accent transition">Our Story</a></li><li><a href="#buy" class="hover:text-accent transition">Buy VRS</a></li></ul></div>
+        <div><h4 class="text-white font-bold mb-4">Resources / Ressources</h4><ul class="space-y-2 text-sm"><li><a href="#faq" class="hover:text-accent transition">FAQ</a></li><li><a href="mailto:vrs@buildverse.one" class="hover:text-accent transition">Contact Team</a></li><li><a href="https://bscscan.com/token/0x1CF41f551efCb9816f3308B25f6b0357571FC6A4" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition">BscScan ↗</a></li><li><a href="https://x.com/BuildVrs01" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition flex items-center gap-1">𝕏 @BuildVrs01</a></li></ul></div>
+      </div>
+      <div class="border-t border-slate-800 pt-8">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-4"><div class="text-sm">Contact: <a href="mailto:vrs@buildverse.one" class="text-accent hover:underline">vrs@buildverse.one</a></div><div class="flex gap-6 text-sm"><button onclick="showCookieBanner()" class="hover:text-accent transition">Cookie Settings</button></div></div>
+        <div class="text-center text-xs text-slate-500"><p class="mb-2">© 2025 BuildVerse. VRS is a utility token. This is not financial advice. Invest responsibly.</p><p><a href="https://buildverse.one" class="hover:text-accent">buildverse.one</a></p></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const CONTRACT_ADDRESS = "0x1CF41f551efCb9816f3308B25f6b0357571FC6A4";
+    const TOKEN_PRICE_USD = 0.01;
+    const TOKEN_SYMBOL = "VRS";
+    const TOKEN_DECIMALS = 0;
+    const BUILDVERSE_ABI = ["function buyTokens() payable", "function tokenPriceUsd() view returns (uint256)", "function usdRaised() view returns (uint256)", "function FUNDING_CAP_USD() view returns (uint256)", "function fundingEnd() view returns (uint256)", "function fundingActive() view returns (bool)", "function balanceOf(address) view returns (uint256)"];
+
+    let bnbPriceUSD = 600;
+
+    async function fetchBnbPrice() {
+      try {
+        const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
+        const data = await response.json();
+        bnbPriceUSD = parseFloat(data.price);
+        calculateVRS();
+      } catch (error) {
+        console.error("Erreur prix BNB :", error);
+      }
+    }
+
+    const translations = {
+      en: {
+        hero: {
+          badge: "🔗 LIVE ON BINANCE SMART CHAIN",
+          title: "Real Estate. Redefined. For Everyone.",
+          subtitle: "BuildVerse (VRS) democratizes real estate investment through blockchain. Backed by Real World Assets, invest from $0.01.",
+          buyButton: "Buy VRS / Acheter",
+          bscscan: "View on BscScan ↗"
+        },
+        stats: {
+          price: "Price / Prix",
+          supply: "Total Supply",
+          network: "Network / Réseau",
+          verified: "Verified / Vérifié",
+          contract: "Contract Address (BEP-20) / Adresse du Contrat"
+        }
+      },
+      fr: {
+        hero: {
+          badge: "🔗 ACTIF SUR BINANCE SMART CHAIN",
+          title: "L'Immobilier. Redéfini. Pour Tous.",
+          subtitle: "BuildVerse (VRS) démocratise l'investissement immobilier via la blockchain. Adossé à des actifs réels, investissez dès 0,01$.",
+          buyButton: "Acheter VRS / Buy VRS",
+          bscscan: "Voir sur BscScan ↗"
+        },
+        stats: {
+          price: "Prix / Price",
+          supply: "Supply Total",
+          network: "Réseau / Network",
+          verified: "Vérifié / Verified",
+          contract: "Adresse du Contrat (BEP-20) / Contract Address"
+        }
+      }
+    };
+
+    let currentLang = 'en';
+    function changeLanguage(lang) {
+      currentLang = lang;
+      document.body.setAttribute('data-lang', lang);
+      localStorage.setItem('buildverse_lang', lang);
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        const keys = key.split('.');
+        let value = translations[lang];
+        for (const k of keys) {
+          value = value[k];
+        }
+        if (value) {
+          element.textContent = value;
+        }
+      });
+    }
+
+    function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
+    
+    function toggleAccordion(button) {
+      const content = button.nextElementSibling;
+      const icon = button.querySelector('span:last-child');
+      document.querySelectorAll('.accordion-content').forEach(acc => {
+        if (acc !== content) {
+          acc.style.maxHeight = null;
+          const otherButton = acc.previousElementSibling;
+          if(otherButton) {
+             const otherIcon = otherButton.querySelector('span:last-child');
+             if(otherIcon) otherIcon.textContent = '+';
+          }
+        }
+      });
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+        icon.textContent = '+';
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+        icon.textContent = '−';
+      }
+    }
+
+    function showCookieBanner() { document.getElementById('cookieBanner').classList.remove('hidden'); }
+    function acceptCookies() { localStorage.setItem('cookiesAccepted', 'true'); document.getElementById('cookieBanner').classList.add('hidden'); }
+
+    let walletConnected = false;
+    let userAddress = null;
+    async function connectWallet() {
+      if (typeof window.ethereum === 'undefined') { alert("Please install MetaMask : https://metamask.io"); return; }
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        userAddress = accounts;
+        walletConnected = true;
+        const shortAddress = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
+        document.getElementById('connectWallet').innerHTML = '🦊 ' + shortAddress;
+        document.getElementById('buyConnectWallet').innerHTML = '🦊 ' + shortAddress;
+        document.getElementById('walletAddress').textContent = userAddress;
+        document.getElementById('walletAddress').classList.remove('hidden');
+        document.getElementById('buyForm').classList.remove('hidden');
+        calculateVRS();
+      } catch (error) { console.error(error); alert("Connection cancelled"); }
+    }
+
+    function calculateVRS() {
+      const bnbAmount = parseFloat(document.getElementById('bnbAmount').value) || 0;
+      if (bnbAmount <= 0) { document.getElementById('vrsAmount').textContent = '—'; return; }
+      const usdValue = bnbAmount * bnbPriceUSD;
+      const vrsAmount = Math.floor(usdValue / TOKEN_PRICE_USD);
+      document.getElementById('vrsAmount').textContent = vrsAmount.toLocaleString();
+    }
+
+    async function buyVRS() {
+      if (!walletConnected) { alert("Please connect your wallet first"); return; }
+      const bnbAmount = document.getElementById('bnbAmount').value;
+      if (!bnbAmount || parseFloat(bnbAmount) <= 0) { alert("Please enter a valid BNB amount"); return; }
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, BUILDVERSE_ABI, signer);
+        const buyButton = document.getElementById('buyButton');
+        buyButton.disabled = true;
+        buyButton.innerHTML = "⏳ Processing...";
+        const tx = await contract.buyTokens({ value: ethers.utils.parseEther(bnbAmount), gasLimit: 300000 });
+        alert("✅ Transaction sent! Hash : " + tx.hash);
+        await tx.wait();
+        alert("🎉 VRS tokens received in your wallet!");
+        document.getElementById('bnbAmount').value = '';
+        document.getElementById('vrsAmount').textContent = '—';
+      } catch (error) { console.error(error); alert("❌ Error : " + (error.reason || error.message || "Transaction failed")); }
+      finally { const buyButton = document.getElementById('buyButton'); buyButton.disabled = false; buyButton.innerHTML = '🏠 Buy VRS Tokens'; }
+    }
+
+    async function addTokenToMetaMask() {
+      if (typeof window.ethereum === 'undefined') { alert("Please install MetaMask"); return; }
+      try {
+        await window.ethereum.request({ method: 'wallet_watchAsset', params: { type: 'ERC20', options: { address: CONTRACT_ADDRESS, symbol: TOKEN_SYMBOL, decimals: TOKEN_DECIMALS, } } });
+        alert("VRS token added to MetaMask!");
+      } catch (error) { console.error(error); }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('buildverse_lang') || 'en';
+      document.getElementById('langSelector').value = savedLang;
+      changeLanguage(savedLang);
+      const cookiesAccepted = localStorage.getItem('cookiesAccepted');
+      if (cookiesAccepted === 'true') { document.getElementById('cookieBanner').classList.add('hidden'); }
+      else if (cookiesAccepted === null) { showCookieBanner(); }
+      
+      // Fermer le menu mobile lors d'un clic sur un lien
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => { 
+        anchor.addEventListener('click', function (e) { 
+          e.preventDefault(); 
+          const target = document.querySelector(this.getAttribute('href')); 
+          if (target) { 
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' }); 
+            document.getElementById('mobileMenu').classList.add('hidden'); 
+          } 
+        }); 
+      });
+      
+      fetchBnbPrice();
+      setInterval(fetchBnbPrice, 60000);
+    });
+
+    window.addEventListener('load', async () => {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+          if (accounts.length > 0) {
+            userAddress = accounts;
+            walletConnected = true;
+            const shortAddress = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
+            document.getElementById('connectWallet').innerHTML = '🦊 ' + shortAddress;
+            document.getElementById('buyConnectWallet').innerHTML = '🦊 ' + shortAddress;
+            document.getElementById('walletAddress').textContent = userAddress;
+            document.getElementById('walletAddress').classList.remove('hidden');
+            document.getElementById('buyForm').classList.remove('hidden');
+          }
+        } catch (error) { console.error(error); }
+      }
+    });
+  </script>
+</body>
+</html>
