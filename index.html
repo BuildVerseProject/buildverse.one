@@ -24,7 +24,8 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+  <!-- ✅ ethers.js via Cloudflare CDN (plus fiable) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 
   <script>
     tailwind.config = {
@@ -468,6 +469,12 @@
           </div>
         </p>
       </div>
+      
+      <!-- ✅ Avertissement pré-achat -->
+      <div class="max-w-2xl mx-auto mb-6 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-xs text-yellow-200 text-center">
+        ⚠️ <strong>Before buying</strong>: Ensure you're on BNB Smart Chain (Mainnet) and have enough BNB for gas fees (~$0.10).
+      </div>
+      
       <div class="max-w-2xl mx-auto bg-gradient-to-br from-primary to-slate-800 rounded-2xl shadow-2xl p-6 sm:p-10 text-white">
         <div class="text-center mb-6">
           <div class="text-4xl mb-3">🦊</div>
@@ -776,12 +783,25 @@
 
     let walletConnected = false;
     let userAddress = null;
+    
     async function connectWallet() {
-      if (typeof window.ethereum === 'undefined') { alert("Please install MetaMask : https://metamask.io"); return; }
+      if (typeof window.ethereum === 'undefined') { 
+        alert("Please install MetaMask : https://metamask.io"); 
+        return; 
+      }
       try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        userAddress = accounts;
+        userAddress = accounts[0];
         walletConnected = true;
+        
+        // ✅ Vérification réseau BSC (Chain ID 56)
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const network = await provider.getNetwork();
+        if (network.chainId !== 56) {
+          alert("⚠️ Please switch to BNB Smart Chain (Mainnet) in MetaMask.");
+          return;
+        }
+        
         const shortAddress = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
         document.getElementById('connectWallet').innerHTML = '🦊 ' + shortAddress;
         document.getElementById('buyConnectWallet').innerHTML = '🦊 ' + shortAddress;
@@ -789,7 +809,10 @@
         document.getElementById('walletAddress').classList.remove('hidden');
         document.getElementById('buyForm').classList.remove('hidden');
         calculateVRS();
-      } catch (error) { console.error(error); alert("Connection cancelled"); }
+      } catch (error) { 
+        console.error(error); 
+        alert("Connection cancelled"); 
+      }
     }
 
     function calculateVRS() {
@@ -804,38 +827,78 @@
       if (!walletConnected) { alert("Please connect your wallet first"); return; }
       const bnbAmount = document.getElementById('bnbAmount').value;
       if (!bnbAmount || parseFloat(bnbAmount) <= 0) { alert("Please enter a valid BNB amount"); return; }
+      
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         const contract = new ethers.Contract(CONTRACT_ADDRESS, BUILDVERSE_ABI, signer);
+        
         const buyButton = document.getElementById('buyButton');
         buyButton.disabled = true;
         buyButton.innerHTML = "⏳ Processing...";
-        const tx = await contract.buyTokens({ value: ethers.utils.parseEther(bnbAmount), gasLimit: 300000 });
+        
+        const tx = await contract.buyTokens({ 
+          value: ethers.utils.parseEther(bnbAmount), 
+          gasLimit: 300000 
+        });
+        
         alert("✅ Transaction sent! Hash : " + tx.hash);
         await tx.wait();
         alert("🎉 VRS tokens received in your wallet!");
+        
         document.getElementById('bnbAmount').value = '';
         document.getElementById('vrsAmount').textContent = '—';
-      } catch (error) { console.error(error); alert("❌ Error : " + (error.reason || error.message || "Transaction failed")); }
-      finally { const buyButton = document.getElementById('buyButton'); buyButton.disabled = false; buyButton.innerHTML = '🏠 Buy VRS Tokens'; }
+        
+      } catch (error) { 
+        console.error(error);
+        
+        // ✅ Gestion d'erreurs améliorée
+        let msg = "❌ Transaction failed";
+        if (error.code === 'ACTION_REJECTED') msg = "Transaction cancelled by user";
+        else if (error.message?.includes('insufficient funds')) msg = "Insufficient funds or gas";
+        else if (error.reason) msg = "❌ " + error.reason;
+        else if (error.message) msg = "❌ " + error.message;
+        
+        alert(msg);
+        
+      } finally { 
+        const buyButton = document.getElementById('buyButton'); 
+        buyButton.disabled = false; 
+        buyButton.innerHTML = '🏠 Buy VRS Tokens'; 
+      }
     }
 
     async function addTokenToMetaMask() {
       if (typeof window.ethereum === 'undefined') { alert("Please install MetaMask"); return; }
       try {
-        await window.ethereum.request({ method: 'wallet_watchAsset', params: { type: 'ERC20', options: { address: CONTRACT_ADDRESS, symbol: TOKEN_SYMBOL, decimals: TOKEN_DECIMALS, } } });
+        await window.ethereum.request({ 
+          method: 'wallet_watchAsset', 
+          params: { 
+            type: 'ERC20', 
+            options: { 
+              address: CONTRACT_ADDRESS, 
+              symbol: TOKEN_SYMBOL, 
+              decimals: TOKEN_DECIMALS, 
+            } 
+          } 
+        });
         alert("VRS token added to MetaMask!");
-      } catch (error) { console.error(error); }
+      } catch (error) { 
+        console.error(error); 
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       const savedLang = localStorage.getItem('buildverse_lang') || 'en';
       document.getElementById('langSelector').value = savedLang;
       changeLanguage(savedLang);
+      
       const cookiesAccepted = localStorage.getItem('cookiesAccepted');
-      if (cookiesAccepted === 'true') { document.getElementById('cookieBanner').classList.add('hidden'); }
-      else if (cookiesAccepted === null) { showCookieBanner(); }
+      if (cookiesAccepted === 'true') { 
+        document.getElementById('cookieBanner').classList.add('hidden'); 
+      } else if (cookiesAccepted === null) { 
+        showCookieBanner(); 
+      }
       
       // Fermer le menu mobile lors d'un clic sur un lien
       document.querySelectorAll('a[href^="#"]').forEach(anchor => { 
@@ -858,7 +921,7 @@
         try {
           const accounts = await window.ethereum.request({ method: 'eth_accounts' });
           if (accounts.length > 0) {
-            userAddress = accounts;
+            userAddress = accounts[0];
             walletConnected = true;
             const shortAddress = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
             document.getElementById('connectWallet').innerHTML = '🦊 ' + shortAddress;
@@ -867,7 +930,9 @@
             document.getElementById('walletAddress').classList.remove('hidden');
             document.getElementById('buyForm').classList.remove('hidden');
           }
-        } catch (error) { console.error(error); }
+        } catch (error) { 
+          console.error(error); 
+        }
       }
     });
   </script>
