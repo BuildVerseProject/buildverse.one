@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | BuildVerse (VRS)</title>
+  <meta name="description" content="Privacy Policy of BuildVerse. How we handle your data, wallet information, and compliance with GDPR.">
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%231e3a5f'/><text x='50' y='65' font-size='40' text-anchor='middle' fill='white' font-family='Arial'>VRS</text></svg>">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1e3a5f',
+            accent: '#D4AF37',
+            'accent-dark': '#B8860B',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    .lang-pair {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    
+    .lang-en, .lang-fr {
+      color: #1e3a5f;
+      font-weight: 400;
+    }
+
+    .bg-primary .lang-en, .bg-primary .lang-fr {
+      color: inherit !important;
+    }
+
+    [data-lang="fr"] .lang-en { display: none; }
+    [data-lang="en"] .lang-fr { display: none; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900" data-lang="en">
+
+  <!-- Navigation simplifiée -->
+  <nav class="bg-white shadow-md sticky top-0 z-40">
+    <div class="container mx-auto px-4 sm:px-6 py-4">
+      <div class="flex justify-between items-center">
+        <a href="index.html" class="flex items-center gap-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary flex items-center justify-center border-2 border-white shadow-lg">
+            <span class="text-white font-bold text-sm sm:text-base">VRS</span>
+          </div>
+          <div class="hidden sm:block lang-pair">
+            <span class="lang-en text-lg font-bold text-primary">BUILDVERSE</span>
+            <span class="lang-fr text-lg font-bold text-primary">BUILDVERSE</span>
+          </div>
+        </a>
+
+        <div class="flex items-center gap-4">
+          <select id="langSelector" onchange="changeLanguage(this.value)" class="border border-slate-300 rounded-lg px-2 py-1 text-sm font-medium text-slate-700 focus:outline-none focus:border-accent">
+            <option value="en">EN</option>
+            <option value="fr">FR</option>
+          </select>
+          <a href="index.html" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg font-semibold text-sm transition">
+            <span class="lang-en">← Back to Home</span>
+            <span class="lang-fr">← Retour à l'accueil</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenu principal -->
+  <main class="py-16 sm:py-24 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 max-w-4xl">
+      <div class="text-center mb-12">
+        <h1 class="text-3xl sm:text-4xl font-bold text-primary mb-4">
+          <div class="lang-pair">
+            <span class="lang-en">Privacy Policy</span>
+            <span class="lang-fr">Politique de Confidentialité</span>
+          </div>
+        </h1>
+        <p class="text-lg text-slate-600">
+          <div class="lang-pair">
+            <span class="lang-en">Last updated: June 2026</span>
+            <span class="lang-fr">Dernière mise à jour : Juin 2026</span>
+          </div>
+        </p>
+      </div>
+
+      <div class="prose prose-slate max-w-none text-slate-700 space-y-8">
+        
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">1. Introduction</span>
+              <span class="lang-fr">1. Introduction</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed">
+            <div class="lang-pair">
+              <span class="lang-en">Welcome to BuildVerse ("we", "our", "us"). We are committed to protecting your personal data and respecting your privacy. This Privacy Policy explains how we collect, use, and safeguard information when you visit our website buildverse.one and use our services.</span>
+              <span class="lang-fr">Bienvenue sur BuildVerse ("nous", "notre"). Nous nous engageons à protéger vos données personnelles et à respecter votre vie privée. Cette Politique de Confidentialité explique comment nous collectons, utilisons et sécurisons les informations lorsque vous visitez notre site buildverse.one et utilisez nos services.</span>
+            </div>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">2. Information We Collect</span>
+              <span class="lang-fr">2. Informations collectées</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">We collect minimal data necessary to operate our platform:</span>
+              <span class="lang-fr">Nous collectons un minimum de données nécessaires au fonctionnement de notre plateforme :</span>
+            </div>
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>
+              <div class="lang-pair">
+                <span class="lang-en"><strong>Public Blockchain Data:</strong> When you interact with our smart contract, your public wallet address and transaction hashes are recorded on the Binance Smart Chain (BSC). This data is public and immutable.</span>
+                <span class="lang-fr"><strong>Données Blockchain publiques :</strong> Lorsque vous interagissez avec notre smart contract, votre adresse de wallet publique et les hashes de transactions sont enregistrés sur la Binance Smart Chain (BSC). Ces données sont publiques et immuables.</span>
+              </div>
+            </li>
+            <li>
+              <div class="lang-pair">
+                <span class="lang-en"><strong>Contact Information:</strong> If you contact us via email (vrs@buildverse.one), we collect your email address and the content of your message.</span>
+                <span class="lang-fr"><strong>Informations de contact :</strong> Si vous nous contactez par email (vrs@buildverse.one), nous collectons votre adresse email et le contenu de votre message.</span>
+              </div>
+            </li>
+            <li>
+              <div class="lang-pair">
+                <span class="lang-en"><strong>Third-Party Providers:</strong> If you use MoonPay to purchase crypto, their privacy policy applies to the data you provide them directly.</span>
+                <span class="lang-fr"><strong>Fournisseurs tiers :</strong> Si vous utilisez MoonPay pour acheter de la crypto, leur politique de confidentialité s'applique aux données que vous leur fournissez directement.</span>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">3. How We Use Your Information</span>
+              <span class="lang-fr">3. Utilisation de vos informations</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed">
+            <div class="lang-pair">
+              <span class="lang-en">We use the collected information solely to: provide and maintain our service, respond to your inquiries, ensure compliance with legal obligations, and improve our platform's user experience. We do not sell your personal data to third parties.</span>
+              <span class="lang-fr">Nous utilisons les informations collectées uniquement pour : fournir et maintenir notre service, répondre à vos demandes, assurer la conformité avec les obligations légales, et améliorer l'expérience utilisateur de notre plateforme. Nous ne vendons pas vos données personnelles à des tiers.</span>
+            </div>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">4. Data Security</span>
+              <span class="lang-fr">4. Sécurité des données</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed">
+            <div class="lang-pair">
+              <span class="lang-en">We implement industry-standard security measures to protect your data. However, please note that no method of transmission over the Internet or electronic storage is 100% secure. Always protect your private keys and seed phrases; we will never ask for them.</span>
+              <span class="lang-fr">Nous mettons en œuvre des mesures de sécurité standard pour protéger vos données. Cependant, aucune méthode de transmission sur Internet ou de stockage électronique n'est sécurisée à 100%. Protégez toujours vos clés privées et phrases secrètes ; nous ne vous les demanderons jamais.</span>
+            </div>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">5. Your Rights (GDPR)</span>
+              <span class="lang-fr">5. Vos droits (RGPD)</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">If you are a resident of the European Economic Area (EEA), you have the right to access, rectify, or delete your personal data held by us. To exercise these rights, please contact us at vrs@buildverse.one.</span>
+              <span class="lang-fr">Si vous résidez dans l'Espace Économique Européen (EEE), vous avez le droit d'accéder, de rectifier ou de supprimer vos données personnelles détenues par nous. Pour exercer ces droits, veuillez nous contacter à vrs@buildverse.one.</span>
+            </div>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">6. Contact Us</span>
+              <span class="lang-fr">6. Nous contacter</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed">
+            <div class="lang-pair">
+              <span class="lang-en">If you have any questions about this Privacy Policy, please contact us at: <a href="mailto:vrs@buildverse.one" class="text-accent hover:underline font-semibold">vrs@buildverse.one</a></span>
+              <span class="lang-fr">Si vous avez des questions concernant cette Politique de Confidentialité, veuillez nous contacter à : <a href="mailto:vrs@buildverse.one" class="text-accent hover:underline font-semibold">vrs@buildverse.one</a></span>
+            </div>
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer simplifié -->
+  <footer class="bg-slate-900 text-slate-300 py-8 border-t border-slate-800">
+    <div class="container mx-auto px-4 sm:px-6 text-center">
+      <p class="text-sm text-slate-500">© 2026 BuildVerse. All rights reserved.</p>
+      <a href="index.html" class="text-accent hover:underline text-sm mt-2 inline-block">
+        <span class="lang-en">Back to Home</span>
+        <span class="lang-fr">Retour à l'accueil</span>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    let currentLang = 'en';
+    function changeLanguage(lang) {
+      currentLang = lang;
+      document.body.setAttribute('data-lang', lang);
+      localStorage.setItem('buildverse_lang', lang);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('buildverse_lang') || 'en';
+      document.getElementById('langSelector').value = savedLang;
+      changeLanguage(savedLang);
+    });
+  </script>
+</body>
+</html>
