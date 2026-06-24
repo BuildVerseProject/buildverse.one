@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms and Conditions | BuildVerse (VRS)</title>
+  <meta name="description" content="Terms and Conditions of BuildVerse. Legal framework for using the VRS token and platform.">
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%231e3a5f'/><text x='50' y='65' font-size='40' text-anchor='middle' fill='white' font-family='Arial'>VRS</text></svg>">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1e3a5f',
+            accent: '#D4AF37',
+            'accent-dark': '#B8860B',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    .lang-pair {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    
+    .lang-en, .lang-fr {
+      color: #1e3a5f;
+      font-weight: 400;
+    }
+
+    .bg-primary .lang-en, .bg-primary .lang-fr {
+      color: inherit !important;
+    }
+
+    [data-lang="fr"] .lang-en { display: none; }
+    [data-lang="en"] .lang-fr { display: none; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900" data-lang="en">
+
+  <!-- Navigation simplifiée -->
+  <nav class="bg-white shadow-md sticky top-0 z-40">
+    <div class="container mx-auto px-4 sm:px-6 py-4">
+      <div class="flex justify-between items-center">
+        <a href="index.html" class="flex items-center gap-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary flex items-center justify-center border-2 border-white shadow-lg">
+            <span class="text-white font-bold text-sm sm:text-base">VRS</span>
+          </div>
+          <div class="hidden sm:block lang-pair">
+            <span class="lang-en text-lg font-bold text-primary">BUILDVERSE</span>
+            <span class="lang-fr text-lg font-bold text-primary">BUILDVERSE</span>
+          </div>
+        </a>
+
+        <div class="flex items-center gap-4">
+          <select id="langSelector" onchange="changeLanguage(this.value)" class="border border-slate-300 rounded-lg px-2 py-1 text-sm font-medium text-slate-700 focus:outline-none focus:border-accent">
+            <option value="en">EN</option>
+            <option value="fr">FR</option>
+          </select>
+          <a href="index.html" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg font-semibold text-sm transition">
+            <span class="lang-en">← Back to Home</span>
+            <span class="lang-fr">← Retour à l'accueil</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenu principal -->
+  <main class="py-16 sm:py-24 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 max-w-4xl">
+      <div class="text-center mb-12">
+        <h1 class="text-3xl sm:text-4xl font-bold text-primary mb-4">
+          <div class="lang-pair">
+            <span class="lang-en">Terms and Conditions</span>
+            <span class="lang-fr">Conditions d'Utilisation</span>
+          </div>
+        </h1>
+        <p class="text-lg text-slate-600">
+          <div class="lang-pair">
+            <span class="lang-en">Last updated: June 2026</span>
+            <span class="lang-fr">Dernière mise à jour : Juin 2026</span>
+          </div>
+        </p>
+      </div>
+
+      <div class="prose prose-slate max-w-none text-slate-700 space-y-8">
+        
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">1. Acceptance of Terms</span>
+              <span class="lang-fr">1. Acceptation des conditions</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed">
+            <div class="lang-pair">
+              <span class="lang-en">By accessing or using the BuildVerse platform (buildverse.one), you agree to be bound by these Terms and Conditions. If you do not agree, please do not use our services.</span>
+              <span class="lang-fr">En accédant ou en utilisant la plateforme BuildVerse (buildverse.one), vous acceptez d'être lié par ces Conditions d'Utilisation. Si vous n'êtes pas d'accord, veuillez ne pas utiliser nos services.</span>
+            </div>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">2. Nature of the VRS Token</span>
+              <span class="lang-fr">2. Nature du Token VRS</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed">
+            <div class="lang-pair">
+              <span class="lang-en">VRS is a utility token designed to provide access to the BuildVerse ecosystem and tokenized real estate assets. It is not intended to be, and should not be construed as, a security, an investment contract, or a guarantee of profit. The purchase of VRS does not constitute financial advice.</span>
+              <span class="lang-fr">VRS est un token utilitaire conçu pour donner accès à l'écosystème BuildVerse et aux actifs immobiliers tokenisés. Il n'est pas destiné à être, et ne doit pas être interprété comme, un titre financier, un contrat d'investissement ou une garantie de profit. L'achat de VRS ne constitue pas un conseil en investissement.</span>
+            </div>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">3. Eligibility</span>
+              <span class="lang-fr">3. Éligibilité</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed">
+            <div class="lang-pair">
+              <span class="lang-en">You must be at least 18 years old to use our platform. It is your sole responsibility to ensure that your use of BuildVerse complies with the laws and regulations of your jurisdiction.</span>
+              <span class="lang-fr">Vous devez avoir au moins 18 ans pour utiliser notre plateforme. Il est de votre seule responsabilité de vous assurer que votre utilisation de BuildVerse est conforme aux lois et réglementations de votre juridiction.</span>
+            </div>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">4. Wallet and Security</span>
+              <span class="lang-fr">4. Wallet et Sécurité</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed">
+            <div class="lang-pair">
+              <span class="lang-en">You are solely responsible for the security of your crypto wallet, private keys, and seed phrases. BuildVerse cannot access, recover, or reset your wallet credentials. Never share your private keys with anyone.</span>
+              <span class="lang-fr">Vous êtes seul responsable de la sécurité de votre wallet crypto, de vos clés privées et de vos phrases secrètes. BuildVerse ne peut pas accéder, récupérer ou réinitialiser vos identifiants de wallet. Ne partagez jamais vos clés privées avec quiconque.</span>
+            </div>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">5. Risk Disclosure</span>
+              <span class="lang-fr">5. Divulgation des risques</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed">
+            <div class="lang-pair">
+              <span class="lang-en">Cryptocurrency and real estate investments carry inherent risks, including market volatility, regulatory changes, and smart contract vulnerabilities. You acknowledge that you are investing at your own risk and should conduct your own due diligence.</span>
+              <span class="lang-fr">Les investissements en cryptomonnaies et dans l'immobilier comportent des risques inhérents, notamment la volatilité du marché, les changements réglementaires et les vulnérabilités des smart contracts. Vous reconnaissez investir à vos propres risques et devez mener votre propre diligence raisonnable.</span>
+            </div>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">6. Limitation of Liability</span>
+              <span class="lang-fr">6. Limitation de responsabilité</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed">
+            <div class="lang-pair">
+              <span class="lang-en">To the maximum extent permitted by law, BuildVerse shall not be liable for any indirect, incidental, or consequential damages arising from your use of the platform or the loss of funds.</span>
+              <span class="lang-fr">Dans la mesure maximale autorisée par la loi, BuildVerse ne saurait être tenu responsable des dommages indirects, accessoires ou consécutifs résultant de votre utilisation de la plateforme ou de la perte de fonds.</span>
+            </div>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">7. Governing Law</span>
+              <span class="lang-fr">7. Droit applicable</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed">
+            <div class="lang-pair">
+              <span class="lang-en">These Terms are governed by and construed in accordance with the laws of the Grand Duchy of Luxembourg.</span>
+              <span class="lang-fr">Les présentes Conditions sont régies et interprétées conformément aux lois du Grand-Duché de Luxembourg.</span>
+            </div>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            <div class="lang-pair">
+              <span class="lang-en">8. Contact Us</span>
+              <span class="lang-fr">8. Nous contacter</span>
+            </div>
+          </h2>
+          <p class="leading-relaxed">
+            <div class="lang-pair">
+              <span class="lang-en">For any questions regarding these Terms, please contact us at: <a href="mailto:vrs@buildverse.one" class="text-accent hover:underline font-semibold">vrs@buildverse.one</a></span>
+              <span class="lang-fr">Pour toute question concernant ces Conditions, veuillez nous contacter à : <a href="mailto:vrs@buildverse.one" class="text-accent hover:underline font-semibold">vrs@buildverse.one</a></span>
+            </div>
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer simplifié -->
+  <footer class="bg-slate-900 text-slate-300 py-8 border-t border-slate-800">
+    <div class="container mx-auto px-4 sm:px-6 text-center">
+      <p class="text-sm text-slate-500">© 2026 BuildVerse. All rights reserved.</p>
+      <a href="index.html" class="text-accent hover:underline text-sm mt-2 inline-block">
+        <span class="lang-en">Back to Home</span>
+        <span class="lang-fr">Retour à l'accueil</span>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    let currentLang = 'en';
+    function changeLanguage(lang) {
+      currentLang = lang;
+      document.body.setAttribute('data-lang', lang);
+      localStorage.setItem('buildverse_lang', lang);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('buildverse_lang') || 'en';
+      document.getElementById('langSelector').value = savedLang;
+      changeLanguage(savedLang);
+    });
+  </script>
+</body>
+</html>
