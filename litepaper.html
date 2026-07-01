@@ -45,11 +45,25 @@
       padding: 20mm;
     }
     
+    /* LOGO RECRÉÉ EN CSS (Identique à ton image) */
     .logo {
       width: 160px;
-      height: auto;
+      height: 160px;
+      background-color: #1e3a5f;
+      border: 8px solid #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 40px;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    
+    .logo-text {
+      color: #ffffff;
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: 2px;
     }
     
     .cover h1 {
@@ -57,7 +71,7 @@
       font-weight: 800;
       margin-bottom: 20px;
       letter-spacing: 4px;
-      color: #ffffff; /* FORCÉ EN BLANC */
+      color: #ffffff;
     }
     
     .cover .subtitle {
@@ -262,8 +276,10 @@
 <div class="page">
   <!-- Cover Page -->
   <div class="cover">
-    <!-- LOGO OFFICIEL -->
-    <img src="https://raw.githubusercontent.com/BuildVerseProject/buildverse.one/refs/heads/main/logo.svg" alt="BuildVerse Logo" class="logo">
+    <!-- LOGO VRS RECRÉÉ EN CSS -->
+    <div class="logo">
+      <span class="logo-text">VRS</span>
+    </div>
     
     <h1>BUILDVERSE</h1>
     <div class="subtitle">Litepaper v1.0</div>
@@ -517,7 +533,7 @@
   </p>
   
   <div class="highlight-box">
-    <h3>🛡️ Economic Shield Strategy</h3>
+    <h3>️ Economic Shield Strategy</h3>
     <p style="margin: 0;">
       By injecting liquidity into real estate SMEs, we ensure that local expertise, contractors, 
       architects, and artisans maintain steady work during market fluctuations.
